@@ -1,0 +1,51 @@
+name: Update VTuber Data
+
+on:
+  schedule:
+    - cron: "10 21 * * *" # UTC 21:10 = 台灣時間 05:10
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create data directory
+        run: mkdir -p data
+
+      - name: Download VTuber data
+        run: |
+          curl -L \
+            "https://raw.githubusercontent.com/TaiwanVtuberData/TaiwanVTuberTrackingDataJson/refs/heads/master/api/v2/all/vtubers/all.json" \
+            -o data/vtubers.json
+
+      - name: Download livestream data
+        run: |
+          curl -L \
+            "https://raw.githubusercontent.com/TaiwanVtuberData/TaiwanVTuberTrackingDataJson/refs/heads/master/api/v2/all/livestreams/all.json" \
+            -o data/livestreams.json
+
+      - name: Validate JSON
+        run: |
+          python -m json.tool data/vtubers.json > /dev/null
+          python -m json.tool data/livestreams.json > /dev/null
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/vtubers.json data/livestreams.json
+
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "chore: update VTuber data"
+            git push
+          fi
