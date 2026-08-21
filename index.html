@@ -393,26 +393,23 @@
         grid-template-columns: 1fr;
       }
 
-      .author-promo {
-  margin-top: 28px;
-  padding: 30px 22px;
+.author-promo {
+  margin: 30px 25px 0;
+  padding: 30px 25px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.88);
+  background: #fffafa;
   border: 1px solid var(--border);
-  border-radius: 22px;
-  box-shadow: 0 8px 24px rgba(80, 50, 50, 0.07);
+  border-radius: 18px;
 }
 
 .author-promo h3 {
-  margin: 0 0 10px;
-  font-size: 20px;
+  margin: 0 0 12px;
   text-align: center;
 }
 
 .author-promo p {
-  margin: 0 auto 20px;
+  margin: 0 auto 22px;
   color: var(--muted);
-  font-size: 14px;
   line-height: 1.7;
   text-align: center;
 }
@@ -421,36 +418,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .author-promo-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 150px;
-  padding: 11px 20px;
-  border-radius: 999px;
+  min-width: 190px;
+  padding: 12px 20px;
+  border-radius: 12px;
   text-decoration: none;
   font-weight: 700;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .author-promo-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(80, 50, 50, 0.12);
+  opacity: 0.9;
 }
 
 .author-promo-button.youtube {
-  background: var(--pink);
+  background: #ff0000;
   color: white;
 }
 
 .author-promo-button.ecpay {
-  background: white;
-  color: var(--pink-dark);
-  border: 1px solid var(--border);
+  background: var(--pink);
+  color: white;
 }
     }
   </style>
@@ -606,7 +603,7 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      ▶ YouTube
+      ▶ 可樂月月 YouTube
     </a>
 
     <a
@@ -847,7 +844,7 @@ console.log("直播數量：", livestreams.length);
 console.log("候選人數量：", pool.length);
 
 $("status").textContent =
-  `VTuber：${vtubers.length}｜候選：${pool.length}`;
+  `VTuber：${vtubers.length}｜30天內活躍V：${pool.length}`;
 
         $("drawButton").disabled = pool.length === 0;
 
