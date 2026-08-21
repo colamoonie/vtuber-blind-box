@@ -637,19 +637,16 @@ function normalizeVtubers(data) {
     return data;
   }
 
+  if (data && Array.isArray(data.VTubers)) {
+    return data.VTubers;
+  }
+
   if (data && Array.isArray(data.vtubers)) {
     return data.vtubers;
   }
 
-  if (data && typeof data === "object") {
-    const values = Object.values(data);
-
-    return values.filter(
-      (item) =>
-        item &&
-        typeof item === "object" &&
-        typeof item.id === "string"
-    );
+  if (data && Array.isArray(data.data)) {
+    return data.data;
   }
 
   return [];
