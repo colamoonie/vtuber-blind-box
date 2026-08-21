@@ -744,10 +744,16 @@ const LIVESTREAM_URL = "./data/livestreams.json";
         vtubers = normalizeVtubers(vtuberData);
         livestreams = normalizeLivestreams(livestreamData);
 
-        pool = buildPool();
+pool = buildPool();
 
-        $("status").textContent =
-          `目前有 ${pool.length} 位符合條件的老婆候選人。`;
+console.log("VTuber 原始資料：", vtubers);
+console.log("VTuber 數量：", vtubers.length);
+console.log("直播原始資料：", livestreams);
+console.log("直播數量：", livestreams.length);
+console.log("候選人數量：", pool.length);
+
+$("status").textContent =
+  `VTuber：${vtubers.length}｜直播：${livestreams.length}｜候選：${pool.length}`;
 
         $("drawButton").disabled = pool.length === 0;
 
