@@ -632,21 +632,28 @@ const LIVESTREAM_URL = "./data/livestreams.json";
       return [];
     }
 
-    function normalizeVtubers(data) {
-      if (Array.isArray(data)) return data;
+function normalizeVtubers(data) {
+  if (Array.isArray(data)) {
+    return data;
+  }
 
-      if (data && Array.isArray(data.data)) return data.data;
+  if (data && Array.isArray(data.vtubers)) {
+    return data.vtubers;
+  }
 
-      if (data && Array.isArray(data.vtubers)) return data.vtubers;
+  if (data && typeof data === "object") {
+    const values = Object.values(data);
 
-      if (data && typeof data === "object") {
-        return Object.values(data).filter(
-          (item) => item && typeof item === "object" && item.name
-        );
-      }
+    return values.filter(
+      (item) =>
+        item &&
+        typeof item === "object" &&
+        typeof item.id === "string"
+    );
+  }
 
-      return [];
-    }
+  return [];
+}
 
     function buildLivestreamMap() {
       const map = new Map();
