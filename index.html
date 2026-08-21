@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💍 來找新老婆｜VTuber 盲盒</title>
+
+  <style>
+    :root {
+      --pink: #ff8080;
+      --pink-dark: #e96666;
+      --pink-light: #fff0f0;
+      --cream: #fffaf7;
+      --text: #3d3535;
+      --muted: #8d7d7d;
+      --card: #ffffff;
+      --border: #f0dddd;
+      --shadow: 0 12px 35px rgba(80, 50, 50, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        system-ui,
+        sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, #fff 0, transparent 25%),
+        radial-gradient(circle at 85% 20%, #ffe7e7 0, transparent 25%),
+        linear-gradient(135deg, #fff8f5, #fff0f0);
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1100px, 94vw);
+      margin: 0 auto;
+      padding: 40px 0 70px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--pink-dark);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 58px);
+      line-height: 1.1;
+      letter-spacing: -2px;
+    }
+
+    .subtitle {
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .main-card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .draw-area {
+      padding: 50px 25px;
+      text-align: center;
+    }
+
+    .box {
+      width: 190px;
+      height: 190px;
+      margin: 0 auto 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 36px;
+      background: linear-gradient(145deg, #ff9a9a, #ff7070);
+      box-shadow:
+        0 20px 40px rgba(255, 128, 128, 0.3),
+        inset 0 2px 0 rgba(255,255,255,.45);
+      color: white;
+      font-size: 90px;
+      user-select: none;
+      transition: transform .25s ease;
+    }
+
+    .box:hover {
+      transform: translateY(-4px) rotate(-2deg);
+    }
+
+    .box.shaking {
+      animation: shake .65s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: rotate(0) scale(1); }
+      20% { transform: rotate(-7deg) scale(1.04); }
+      40% { transform: rotate(7deg) scale(1.08); }
+      60% { transform: rotate(-6deg) scale(1.05); }
+      80% { transform: rotate(5deg) scale(1.03); }
+    }
+
+    .draw-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 16px 38px;
+      background: var(--pink);
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 128, 128, .3);
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .draw-button:hover {
+      background: var(--pink-dark);
+      transform: translateY(-2px);
+    }
+
+    .draw-button:disabled {
+      opacity: .55;
+      cursor: wait;
+      transform: none;
+    }
+
+    .status {
+      min-height: 24px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .result {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 35px;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-label {
+      text-align: center;
+      color: var(--pink-dark);
+      font-weight: 800;
+      margin-bottom: 22px;
+    }
+
+    .profile {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .avatar-wrap {
+      aspect-ratio: 1;
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--pink-light);
+      border: 1px solid var(--border);
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .name {
+      margin: 0 0 15px;
+      font-size: clamp(28px, 5vw, 42px);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--pink-light);
+      color: var(--pink-dark);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .info {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .info-label {
+      color: var(--muted);
+      min-width: 90px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .link-button:hover {
+      border-color: var(--pink);
+      color: var(--pink-dark);
+    }
+
+    .favorite-button {
+      border: 0;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--pink);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .favorite-button.saved {
+      background: #5f5555;
+    }
+
+    .recent {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid var(--border);
+    }
+
+    .recent h3 {
+      margin: 0 0 15px;
+    }
+
+    .stream {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 15px;
+      padding: 12px;
+      border-radius: 16px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+    }
+
+    .stream-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .stream-title {
+      margin: 0 0 8px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .stream-time {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .stream a {
+      color: var(--pink-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 25px;
+      border-top: 1px solid var(--border);
+      background: #fffafa;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .panel h3 {
+      margin: 0 0 12px;
+    }
+
+    .count {
+      color: var(--pink-dark);
+    }
+
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 7px;
+      max-height: 190px;
+      overflow-y: auto;
+    }
+
+    .list li {
+      padding: 8px 10px;
+      border-radius: 9px;
+      background: var(--cream);
+      font-size: 14px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .profile {
+        grid-template-columns: 1fr;
+      }
+
+      .avatar-wrap {
+        max-width: 260px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .bottom {
+        grid-template-columns: 1fr;
+      }
+
+      .result {
+        padding: 25px 18px;
+      }
+
+      .stream {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <header>
+      <div class="eyebrow">VTuber 盲盒企劃</div>
+      <h1>💍 來找新老婆</h1>
+      <p class="subtitle">
+        推沒了，不知道下一個看誰？那就抽一個。
+      </p>
+    </header>
+
+    <main class="main-card">
+
+      <section class="draw-area">
+        <div id="box" class="box">🎁</div>
+
+        <button id="drawButton" class="draw-button">
+          開盲盒！
+        </button>
+
+        <div id="status" class="status">
+          正在準備老婆候選名單……
+        </div>
+      </section>
+
+      <section id="result" class="result">
+        <div class="result-label">✨ 恭喜你抽到今日老婆候選人 ✨</div>
+
+        <div class="profile">
+
+          <div class="avatar-wrap">
+            <img id="avatar" class="avatar" src="" alt="" />
+          </div>
+
+          <div>
+            <h2 id="name" class="name">---</h2>
+
+            <div id="tags" class="tags"></div>
+
+            <div class="info">
+              <div class="info-row">
+                <span class="info-label">活動狀態</span>
+                <strong id="activity">---</strong>
+              </div>
+
+              <div class="info-row" id="groupRow">
+                <span class="info-label">所屬團體</span>
+                <strong id="group">---</strong>
+              </div>
+
+              <div class="info-row" id="nationalityRow">
+                <span class="info-label">國籍</span>
+                <strong id="nationality">---</strong>
+              </div>
+
+              <div class="info-row">
+                <span class="info-label">最近開台</span>
+                <strong id="latestStream">---</strong>
+              </div>
+            </div>
+
+            <div class="links">
+              <a id="youtubeLink"
+                 class="link-button"
+                 href="#"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 style="display:none;">
+                ▶ YouTube
+              </a>
+
+              <a id="twitchLink"
+                 class="link-button"
+                 href="#"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 style="display:none;">
+                🟣 Twitch
+              </a>
+
+              <button id="favoriteButton" class="favorite-button">
+                ⭐ 收藏這位
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="recent" class="recent" style="display:none;">
+          <h3>📺 最近直播</h3>
+
+          <div class="stream">
+            <img id="streamThumb" class="stream-thumb" src="" alt="" />
+
+            <div>
+              <p id="streamTitle" class="stream-title">---</p>
+              <div id="streamTime" class="stream-time">---</div>
+
+              <a id="streamLink"
+                 href="#"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                ▶ 去看看這場直播
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bottom">
+
+        <div class="panel">
+          <h3>
+            💍 本場已認識
+            <span id="drawnCount" class="count">0</span> 位
+          </h3>
+
+          <ul id="drawnList" class="list">
+            <li class="empty">還沒有抽過老婆</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>
+            ⭐ 我的老婆收藏
+            <span id="favoriteCount" class="count">0</span> 位
+          </h3>
+
+          <ul id="favoriteList" class="list">
+            <li class="empty">還沒有收藏</li>
+          </ul>
+        </div>
+
+      </section>
+    </main>
+
+    <div class="footer">
+      資料來源：Taiwan VTuber Data · 資料會隨原始資料庫更新
+    </div>
+  </div>
+
+  <script>
+    const VTUBER_URL =
+      "https://raw.githubusercontent.com/TaiwanVtuberData/TaiwanVTuberTrackingDataJson/master/api/v2/all/vtubers/all.json";
+
+    const LIVESTREAM_URL =
+      "https://raw.githubusercontent.com/TaiwanVtuberData/TaiwanVTuberTrackingDataJson/master/api/v2/all/livestreams/all.json";
+
+    const DAYS = 30;
+
+    let vtubers = [];
+    let livestreams = [];
+    let pool = [];
+    let drawn = [];
+    let current = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(value) {
+      if (value == null) return "";
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(date) {
+      if (!date || Number.isNaN(date.getTime())) return "未知";
+
+      return new Intl.DateTimeFormat("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(date);
+    }
+
+    function daysAgo(date) {
+      return (Date.now() - date.getTime()) / 86400000;
+    }
+
+    function getYoutubeUrl(id) {
+      return id ? `https://www.youtube.com/channel/${id}` : null;
+    }
+
+    function getTwitchUrl(id) {
+      return id ? `https://www.twitch.tv/${id}` : null;
+    }
+
+    function getYoutubeId(vtuber) {
+      return vtuber.YouTube?.id ?? vtuber.YouTubeId ?? null;
+    }
+
+    function getTwitchId(vtuber) {
+      return vtuber.Twitch?.id ?? vtuber.TwitchId ?? null;
+    }
+
+    function getActivity(vtuber) {
+      return vtuber.activity ?? null;
+    }
+
+    function getLivestreamVtuberId(stream) {
+      return (
+        stream.VTuberId ??
+        stream.vtuberId ??
+        stream.vtuber_id ??
+        stream.id ??
+        null
+      );
+    }
+
+    function getLivestreamName(stream) {
+      return stream.name ?? null;
+    }
+
+    function getStreamTime(stream) {
+      const value = stream.startTime;
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function normalizeLivestreams(data) {
+      if (Array.isArray(data)) return data;
+
+      if (data && Array.isArray(data.data)) return data.data;
+
+      if (data && Array.isArray(data.livestreams)) return data.livestreams;
+
+      if (data && typeof data === "object") {
+        return Object.values(data).flatMap((item) => {
+          if (Array.isArray(item)) return item;
+          return [];
+        });
+      }
+
+      return [];
+    }
+
+    function normalizeVtubers(data) {
+      if (Array.isArray(data)) return data;
+
+      if (data && Array.isArray(data.data)) return data.data;
+
+      if (data && Array.isArray(data.vtubers)) return data.vtubers;
+
+      if (data && typeof data === "object") {
+        return Object.values(data).filter(
+          (item) => item && typeof item === "object" && item.name
+        );
+      }
+
+      return [];
+    }
+
+    function buildLivestreamMap() {
+      const map = new Map();
+
+      for (const stream of livestreams) {
+        const name = getLivestreamName(stream);
+        const id = getLivestreamVtuberId(stream);
+
+        const date = getStreamTime(stream);
+
+        if (!date) continue;
+
+        const key = id ?? name;
+        if (!key) continue;
+
+        if (!map.has(key)) {
+          map.set(key, []);
+        }
+
+        map.get(key).push(stream);
+      }
+
+      for (const list of map.values()) {
+        list.sort((a, b) => {
+          return getStreamTime(b) - getStreamTime(a);
+        });
+      }
+
+      return map;
+    }
+
+    function findStreamsForVtuber(vtuber, map) {
+      const byId = map.get(vtuber.id);
+
+      if (byId) return byId;
+
+      const byName = map.get(vtuber.name);
+
+      return byName ?? [];
+    }
+
+    function buildPool() {
+      const map = buildLivestreamMap();
+      const cutoff = Date.now() - DAYS * 86400000;
+
+      return vtubers.filter((vtuber) => {
+        if (getActivity(vtuber) !== "active") {
+          return false;
+        }
+
+        const youtube = getYoutubeId(vtuber);
+        const twitch = getTwitchId(vtuber);
+
+        if (!youtube && !twitch) {
+          return false;
+        }
+
+        const streams = findStreamsForVtuber(vtuber, map);
+
+        if (streams.length === 0) {
+          return false;
+        }
+
+        const latest = getStreamTime(streams[0]);
+
+        if (!latest) {
+          return false;
+        }
+
+        return latest.getTime() >= cutoff;
+      });
+    }
+
+    async function loadData() {
+      $("drawButton").disabled = true;
+      $("status").textContent = "正在抓取 VTuber 資料……";
+
+      try {
+        const [vtuberResponse, livestreamResponse] = await Promise.all([
+          fetch(VTUBER_URL),
+          fetch(LIVESTREAM_URL),
+        ]);
+
+        if (!vtuberResponse.ok) {
+          throw new Error(`VTuber 資料讀取失敗：${vtuberResponse.status}`);
+        }
+
+        if (!livestreamResponse.ok) {
+          throw new Error(`直播資料讀取失敗：${livestreamResponse.status}`);
+        }
+
+        const vtuberData = await vtuberResponse.json();
+        const livestreamData = await livestreamResponse.json();
+
+        vtubers = normalizeVtubers(vtuberData);
+        livestreams = normalizeLivestreams(livestreamData);
+
+        pool = buildPool();
+
+        $("status").textContent =
+          `目前有 ${pool.length} 位符合條件的老婆候選人。`;
+
+        $("drawButton").disabled = pool.length === 0;
+
+      } catch (error) {
+        console.error(error);
+
+        $("status").textContent =
+          "資料抓取失敗，請確認 GitHub Raw 資料目前是否正常。";
+
+        $("drawButton").disabled = true;
+      }
+    }
+
+    function getLatestStreams(vtuber) {
+      const map = buildLivestreamMap();
+      return findStreamsForVtuber(vtuber, map);
+    }
+
+    function draw() {
+      const available = pool.filter(
+        (vtuber) => !drawn.includes(vtuber.id)
+      );
+
+      if (available.length === 0) {
+        $("status").textContent =
+          "今天的老婆都抽完啦！可以開始重新整理了。💍";
+
+        return;
+      }
+
+      const box = $("box");
+
+      box.classList.remove("shaking");
+      void box.offsetWidth;
+      box.classList.add("shaking");
+
+      $("drawButton").disabled = true;
+      $("status").textContent = "正在尋找你的命定老婆……";
+
+      setTimeout(() => {
+        const index = Math.floor(Math.random() * available.length);
+
+        current = available[index];
+
+        drawn.push(current.id);
+
+        renderResult(current);
+        renderDrawn();
+        updateFavoriteButton();
+
+        $("drawButton").disabled = false;
+        $("status").textContent =
+          `還有 ${available.length - 1} 位老婆候選人可以抽。`;
+
+      }, 700);
+    }
+
+    function renderResult(vtuber) {
+      $("result").classList.add("show");
+
+      $("name").textContent = vtuber.name ?? "未知 VTuber";
+
+      const avatar = vtuber.imgUrl;
+
+      if (avatar) {
+        $("avatar").src = avatar;
+        $("avatar").alt = vtuber.name ?? "";
+      } else {
+        $("avatar").removeAttribute("src");
+        $("avatar").alt = "沒有頭像";
+      }
+
+      $("activity").textContent = "🟢 活躍";
+
+      if (vtuber.group) {
+        $("group").textContent = vtuber.group;
+        $("groupRow").style.display = "flex";
+      } else {
+        $("groupRow").style.display = "none";
+      }
+
+      if (vtuber.nationality) {
+        $("nationality").textContent = vtuber.nationality;
+        $("nationalityRow").style.display = "flex";
+      } else {
+        $("nationalityRow").style.display = "none";
+      }
+
+      const tags = [];
+
+      const youtube = getYoutubeId(vtuber);
+      const twitch = getTwitchId(vtuber);
+
+      if (youtube) tags.push("YouTube");
+      if (twitch) tags.push("Twitch");
+
+      if (vtuber.group) tags.push(vtuber.group);
+
+      $("tags").innerHTML = tags
+        .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
+        .join("");
+
+      const youtubeLink = $("youtubeLink");
+
+      if (youtube) {
+        youtubeLink.href = getYoutubeUrl(youtube);
+        youtubeLink.style.display = "inline-flex";
+      } else {
+        youtubeLink.style.display = "none";
+      }
+
+      const twitchLink = $("twitchLink");
+
+      if (twitch) {
+        twitchLink.href = getTwitchUrl(twitch);
+        twitchLink.style.display = "inline-flex";
+      } else {
+        twitchLink.style.display = "none";
+      }
+
+      const streams = getLatestStreams(vtuber);
+
+      const latest = streams[0];
+
+      if (latest) {
+        const latestDate = getStreamTime(latest);
+
+        $("latestStream").textContent =
+          latestDate ? formatDate(latestDate) : "未知";
+
+        $("recent").style.display = "block";
+
+        $("streamTitle").textContent =
+          latest.title ?? "最近直播";
+
+        $("streamTime").textContent =
+          latestDate ? formatDate(latestDate) : "";
+
+        $("streamThumb").src =
+          latest.thumbnailUrl ?? "";
+
+        $("streamThumb").alt =
+          latest.title ?? "直播縮圖";
+
+        $("streamLink").href =
+          latest.videoUrl ?? "#";
+      } else {
+        $("latestStream").textContent = "未知";
+        $("recent").style.display = "none";
+      }
+    }
+
+    function getFavorites() {
+      try {
+        return JSON.parse(
+          localStorage.getItem("vtuberBlindBoxFavorites") || "[]"
+        );
+      } catch {
+        return [];
+      }
+    }
+
+    function saveFavorites(favorites) {
+      localStorage.setItem(
+        "vtuberBlindBoxFavorites",
+        JSON.stringify(favorites)
+      );
+    }
+
+    function isFavorite(id) {
+      return getFavorites().some((item) => item.id === id);
+    }
+
+    function updateFavoriteButton() {
+      if (!current) return;
+
+      const button = $("favoriteButton");
+      const saved = isFavorite(current.id);
+
+      button.classList.toggle("saved", saved);
+      button.textContent = saved
+        ? "⭐ 已收藏"
+        : "⭐ 收藏這位";
+    }
+
+    function toggleFavorite() {
+      if (!current) return;
+
+      const favorites = getFavorites();
+
+      const index = favorites.findIndex(
+        (item) => item.id === current.id
+      );
+
+      if (index >= 0) {
+        favorites.splice(index, 1);
+      } else {
+        favorites.push({
+          id: current.id,
+          name: current.name,
+          imgUrl: current.imgUrl ?? null,
+        });
+      }
+
+      saveFavorites(favorites);
+
+      updateFavoriteButton();
+      renderFavorites();
+    }
+
+    function renderDrawn() {
+      const list = $("drawnList");
+
+      $("drawnCount").textContent = drawn.length;
+
+      if (drawn.length === 0) {
+        list.innerHTML =
+          `<li class="empty">還沒有抽過老婆</li>`;
+        return;
+      }
+
+      list.innerHTML = drawn
+        .map((id) => {
+          const vtuber = pool.find((item) => item.id === id);
+
+          if (!vtuber) return "";
+
+          return `<li>💍 ${escapeHtml(vtuber.name)}</li>`;
+        })
+        .join("");
+    }
+
+    function renderFavorites() {
+      const favorites = getFavorites();
+
+      $("favoriteCount").textContent = favorites.length;
+
+      const list = $("favoriteList");
+
+      if (favorites.length === 0) {
+        list.innerHTML =
+          `<li class="empty">還沒有收藏</li>`;
+        return;
+      }
+
+      list.innerHTML = favorites
+        .map((item) => {
+          return `<li>⭐ ${escapeHtml(item.name)}</li>`;
+        })
+        .join("");
+    }
+
+    $("drawButton").addEventListener("click", draw);
+
+    $("favoriteButton").addEventListener(
+      "click",
+      toggleFavorite
+    );
+
+    renderFavorites();
+    renderDrawn();
+    loadData();
+  </script>
+</body>
+</html>
