@@ -395,7 +395,7 @@
 
       .author-promo {
   margin-top: 28px;
-  padding: 26px 22px;
+  padding: 30px 22px;
   text-align: center;
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--border);
@@ -404,29 +404,33 @@
 }
 
 .author-promo h3 {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-size: 20px;
+  text-align: center;
 }
 
 .author-promo p {
-  margin: 0 auto 18px;
+  margin: 0 auto 20px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.7;
+  text-align: center;
 }
 
 .author-promo-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 16px;
 }
 
 .author-promo-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 18px;
+  min-width: 150px;
+  padding: 11px 20px;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 700;
@@ -843,7 +847,7 @@ console.log("直播數量：", livestreams.length);
 console.log("候選人數量：", pool.length);
 
 $("status").textContent =
-  `VTuber：${vtubers.length}｜直播：${livestreams.length}｜候選：${pool.length}`;
+  `VTuber：${vtubers.length}｜候選：${pool.length}`;
 
         $("drawButton").disabled = pool.length === 0;
 
